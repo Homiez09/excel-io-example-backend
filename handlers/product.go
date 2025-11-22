@@ -23,9 +23,8 @@ func ExportProduct(c *fiber.Ctx) error {
 		return c.Status(500).SendString(err.Error())
 	}
 
-	sw.SetRow("A1", []interface{}{"Code", "Name", "Price", "Stock", "Updated At"})
+	sw.SetRow("A1", []interface{}{"ID", "Code", "Name", "Price", "Stock", "Updated At"})
 
-	// เรียก DB จาก package database
 	rows, err := database.DB.Model(&models.Product{}).Rows()
 	if err != nil {
 		return c.Status(500).SendString(err.Error())
@@ -38,7 +37,7 @@ func ExportProduct(c *fiber.Ctx) error {
 		database.DB.ScanRows(rows, &p)
 
 		cell := fmt.Sprintf("A%d", rowIndex)
-		values := []interface{}{p.Code, p.Name, p.Price, p.Stock, p.CreatedAt}
+		values := []interface{}{p.ID, p.Code, p.Name, p.Price, p.Stock, p.CreatedAt.Format("2006-01-02")}
 
 		if err := sw.SetRow(cell, values); err != nil {
 			return c.Status(500).SendString("Write error")

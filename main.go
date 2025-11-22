@@ -8,9 +8,15 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	// Load .env file
+	if err := godotenv.Load(); err != nil {
+		log.Println("⚠️  No .env file found, using environment variables")
+	}
+
 	// Connect to database
 	database.Connect()
 
